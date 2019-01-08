@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">xkcd</string>
+    <string name="xkcd_logo">xkcd logo</string>
 </resources>
