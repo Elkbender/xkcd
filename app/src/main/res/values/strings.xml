@@ -1,4 +1,15 @@
 <resources>
     <string name="app_name">xkcd</string>
     <string name="xkcd_logo">xkcd logo</string>
+    <string name="title_comic">Comic</string>
+    <string name="title_favourites">Favourites</string>
+    <string name="no_favourites">No favourites :(</string>
+    <string name="menu_item_search">Search</string>
+    <string name="menu_item_share">Share</string>
+
+    <string name="first_comic"><![CDATA[|<]]></string>
+    <string name="prev_comic"><![CDATA[< Prev]]></string>
+    <string name="random_comic">Random</string>
+    <string name="next_comic"><![CDATA[Next >]]></string>
+    <string name="last_comic"><![CDATA[>|]]></string>
 </resources>
