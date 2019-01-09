@@ -1,4 +1,4 @@
-package no.elkbender.xkcd
+package no.elkbender.xkcd.activities
 
 
 import android.graphics.Bitmap
@@ -6,8 +6,8 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.beust.klaxon.Klaxon
-import no.elkbender.xkcd.Comic
 import no.elkbender.xkcd.R
+import no.elkbender.xkcd.db.Comic
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.OkHttpClient

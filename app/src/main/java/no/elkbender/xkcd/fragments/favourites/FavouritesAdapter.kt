@@ -1,10 +1,12 @@
-package no.elkbender.xkcd
+package no.elkbender.xkcd.fragments.favourites
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import no.elkbender.xkcd.db.Comic
+import no.elkbender.xkcd.R
 
 class FavouritesAdapter(private val favourites: List<Comic>, private val clickListener: (Comic) -> Unit) : RecyclerView.Adapter<FavouritesAdapter.FavViewHolder>() {
     inner class FavViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

@@ -1,8 +1,9 @@
-package no.elkbender.xkcd
+package no.elkbender.xkcd.extensions
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
+import no.elkbender.xkcd.R
 
 fun AppCompatActivity.replaceFragment(fragment: Fragment, frameId: Int, tag: String? = null) {
     supportFragmentManager.inTransaction {

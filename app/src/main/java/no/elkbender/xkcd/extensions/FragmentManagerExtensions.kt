@@ -1,4 +1,4 @@
-package no.elkbender.xkcd
+package no.elkbender.xkcd.extensions
 
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction

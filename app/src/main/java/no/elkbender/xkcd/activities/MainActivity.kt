@@ -1,4 +1,4 @@
-package no.elkbender.xkcd
+package no.elkbender.xkcd.activities
 
 import android.content.Context
 import android.content.Intent
@@ -10,6 +10,13 @@ import android.view.MenuItem
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
+import no.elkbender.xkcd.R
+import no.elkbender.xkcd.db.Comic
+import no.elkbender.xkcd.db.ComicsDb
+import no.elkbender.xkcd.extensions.replaceFragment
+import no.elkbender.xkcd.extensions.showSnack
+import no.elkbender.xkcd.fragments.comic.ComicFragment
+import no.elkbender.xkcd.fragments.favourites.FavouritesFragment
 import okhttp3.Call
 import okhttp3.OkHttpClient
 import okhttp3.Request

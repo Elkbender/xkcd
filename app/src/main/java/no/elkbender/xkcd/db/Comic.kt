@@ -1,4 +1,4 @@
-package no.elkbender.xkcd
+package no.elkbender.xkcd.db
 
 import android.os.Parcelable
 import androidx.room.ColumnInfo

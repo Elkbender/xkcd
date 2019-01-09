@@ -1,4 +1,4 @@
-package no.elkbender.xkcd
+package no.elkbender.xkcd.fragments.comic
 
 import android.content.Intent
 import android.graphics.Bitmap
@@ -15,7 +15,11 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_comic.*
 import kotlinx.android.synthetic.main.nav_button_bar.*
-import no.elkbender.xkcd.MainActivity.Companion.fetchComic
+import no.elkbender.xkcd.db.Comic
+import no.elkbender.xkcd.activities.MainActivity
+import no.elkbender.xkcd.activities.MainActivity.Companion.fetchComic
+import no.elkbender.xkcd.R
+import no.elkbender.xkcd.extensions.showSnack
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.OkHttpClient
