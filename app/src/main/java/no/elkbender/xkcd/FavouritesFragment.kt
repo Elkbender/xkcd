@@ -1,11 +1,15 @@
 package no.elkbender.xkcd
 
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_favourites.*
+import java.net.URL
 
 
 class FavouritesFragment : Fragment() {
@@ -24,5 +28,30 @@ class FavouritesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         requireActivity().title = resources.getString(R.string.title_favourites)
         no_favs.visibility = if (db.comicsDao().getAll().isEmpty()) View.VISIBLE else View.GONE
+
+        val manager = LinearLayoutManager(requireContext())
+        val viewAdapter = FavouritesAdapter(db.comicsDao().getAll()) { item: Comic -> favouriteItemClicked(item) }
+
+        requireActivity().findViewById<RecyclerView>(R.id.fav_list).apply {
+            setHasFixedSize(true)
+            layoutManager = manager
+            adapter = viewAdapter
+        }
+    }
+
+    private fun favouriteItemClicked(item: Comic) {
+        val activity = (activity as MainActivity)
+
+        Thread {
+            activity.replaceComicFragment(
+                ComicFragment.newInstance(
+                    item, MainActivity.convertToByteArray(
+                        BitmapFactory.decodeStream(
+                            URL(item.img).openStream()
+                        )
+                    )
+                )
+            )
+        }.start()
     }
 }

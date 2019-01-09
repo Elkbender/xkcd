@@ -87,7 +87,7 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun replaceComicFragment(fragment: ComicFragment) {
+    fun replaceComicFragment(fragment: ComicFragment) {
         comicFragment = fragment
         runOnUiThread {
             navigation.selectedItemId = R.id.navigation_comic
