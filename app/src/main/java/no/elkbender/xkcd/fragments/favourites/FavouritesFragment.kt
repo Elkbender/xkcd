@@ -22,7 +22,7 @@ class FavouritesFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        db = (activity as MainActivity).db
+        db = ComicsDb.getInstance(requireContext())
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

@@ -12,7 +12,7 @@ abstract class ComicsDb : RoomDatabase() {
     companion object {
         private const val DATABASE_NAME = "comics-db"
 
-        fun buildDatabase(context: Context): ComicsDb {
+        fun getInstance(context: Context): ComicsDb {
             return Room.databaseBuilder(
                 context,
                 ComicsDb::class.java,

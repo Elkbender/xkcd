@@ -5,8 +5,9 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import no.elkbender.xkcd.R
 
-fun AppCompatActivity.replaceFragment(fragment: Fragment, frameId: Int, tag: String? = null) {
+fun AppCompatActivity.replaceFragment(fragment: Fragment, enterAnim: Int, exitAnim: Int, frameId: Int, tag: String? = null) {
     supportFragmentManager.inTransaction {
+        setCustomAnimations(enterAnim, exitAnim)
         replace(frameId, fragment)
         tag?.let { addToBackStack(fragment.javaClass.canonicalName) }
     }

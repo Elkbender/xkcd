@@ -19,6 +19,7 @@ import no.elkbender.xkcd.db.Comic
 import no.elkbender.xkcd.activities.MainActivity
 import no.elkbender.xkcd.activities.MainActivity.Companion.fetchComic
 import no.elkbender.xkcd.R
+import no.elkbender.xkcd.db.ComicsDb
 import no.elkbender.xkcd.extensions.showSnack
 import okhttp3.Call
 import okhttp3.Callback
@@ -92,12 +93,13 @@ class ComicFragment : Fragment() {
 
     private fun addFabListener() {
         val activity = (requireActivity() as MainActivity)
-        val dao = activity.db.comicsDao()
+        val dao = ComicsDb.getInstance(requireContext()).comicsDao()
 
         activity.fab.show()
         activity.fab.setOnClickListener {
             if (isFavourite()) dao.delete(comic)
             else dao.insertAll(comic)
+            setFabIcon()
         }
     }
 
@@ -135,6 +137,7 @@ class ComicFragment : Fragment() {
 
     private fun showComic() {
         toggleProgressBar(View.GONE)
+        setFabIcon()
 
         requireActivity().runOnUiThread {
             requireActivity().title = comic.safe_title
@@ -142,7 +145,12 @@ class ComicFragment : Fragment() {
         }
     }
 
-    private fun isFavourite() = comic in (activity as MainActivity).db.comicsDao().getAll()
+    private fun setFabIcon() {
+        val activity = (activity as MainActivity)
+        activity.fab.setImageResource((if (isFavourite()) R.drawable.fab_unfavourite else R.drawable.fab_favourite))
+    }
+
+    private fun isFavourite() = comic in ComicsDb.getInstance(requireContext()).comicsDao().getAll()
 
     private fun toggleProgressBar(state: Int) = requireActivity().runOnUiThread {
         progressbar.visibility = state

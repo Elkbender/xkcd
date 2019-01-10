@@ -23,7 +23,7 @@ import okhttp3.Request
 import java.io.ByteArrayOutputStream
 
 class MainActivity : AppCompatActivity() {
-    lateinit var db: ComicsDb
+    private lateinit var db: ComicsDb
 
     private lateinit var menu: Menu
     private lateinit var comicFragment: ComicFragment
@@ -36,6 +36,8 @@ class MainActivity : AppCompatActivity() {
                 menu.findItem(R.id.share).isVisible = true
                 replaceFragment(
                     comicFragment,
+                    R.anim.enter_left,
+                    R.anim.exit_right,
                     R.id.fragment_container,
                     ComicFragment::class.java.canonicalName
                 )
@@ -46,6 +48,8 @@ class MainActivity : AppCompatActivity() {
                 menu.findItem(R.id.share).isVisible = false
                 replaceFragment(
                     favsFragment,
+                    R.anim.enter_right,
+                    R.anim.exit_left,
                     R.id.fragment_container,
                     FavouritesFragment::class.java.canonicalName
                 )
@@ -59,7 +63,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        db = ComicsDb.buildDatabase(this)
+        db = ComicsDb.getInstance(this)
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
     }
