@@ -116,6 +116,8 @@ class MainActivity : AppCompatActivity() {
         fun next(c: Comic) = "https://xkcd.com/${c.num.plus(1)}/info.0.json"
         fun random() = "https://xkcd.com/221/info.0.json" // TODO: Make actual random rather than joke
 
+        fun buildUrl(num: String) = "https://xkcd.com/$num/info.0.json"
+
         fun fetchComic(client: OkHttpClient, url: String): Call {
             val request = Request.Builder()
                 .url(url)

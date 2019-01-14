@@ -15,7 +15,7 @@ import okhttp3.Response
 import java.io.IOException
 import java.net.URL
 
-class SplashActivity : AppCompatActivity()  {
+class SplashActivity : AppCompatActivity() {
     private val client = OkHttpClient()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,7 +28,7 @@ class SplashActivity : AppCompatActivity()  {
     private fun initComic() {
         MainActivity.fetchComic(
             client,
-            MainActivity.CURRENT_COMIC
+            getComicUrl()
         ).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {}
 
@@ -43,6 +43,16 @@ class SplashActivity : AppCompatActivity()  {
                 }
             }
         })
+    }
+
+    private fun getComicUrl(): String {
+        val data = intent.data
+        val params = data?.pathSegments
+
+        return if (params == null)
+            MainActivity.CURRENT_COMIC
+        else
+            MainActivity.buildUrl(params[0])
     }
 
     private fun startMain(comic: Comic, img: Bitmap) {
