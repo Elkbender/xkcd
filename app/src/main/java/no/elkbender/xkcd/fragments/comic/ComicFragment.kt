@@ -29,6 +29,8 @@ import okhttp3.OkHttpClient
 import okhttp3.Response
 import java.io.IOException
 import java.net.URL
+import android.util.TypedValue
+
 
 class ComicFragment : Fragment(), View.OnTouchListener {
     private val client = OkHttpClient()
@@ -41,7 +43,7 @@ class ComicFragment : Fragment(), View.OnTouchListener {
 
         gestureDetector = GestureDetector(requireContext(), object : GestureListener() {
             override fun onSwipe(direction: Direction): Boolean {
-                when(direction) {
+                when (direction) {
                     Direction.Left -> next.callOnClick()
                     Direction.Right -> prev.callOnClick()
                     else -> print("Ignore these")
@@ -173,11 +175,20 @@ class ComicFragment : Fragment(), View.OnTouchListener {
         requireActivity().runOnUiThread {
             requireActivity().title = comic.safe_title
             comic_img.setImageBitmap(image)
-            padding.visibility = if(isScrollable()) View.VISIBLE else View.GONE
+            padding.visibility = if (isScrollable()) View.VISIBLE else View.GONE
         }
     }
 
-    private fun isScrollable() = comic_view.height < comic_img.height + comic_view.paddingTop + comic_view.paddingBottom
+    private fun isScrollable() =
+        comic_view.height < comic_img.height + comic_view.paddingTop + comic_view.paddingBottom + dipToPixels(52)
+
+    private fun dipToPixels(dip: Int): Int {
+        return TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            dip.toFloat(),
+            resources.displayMetrics
+        ).toInt()
+    }
 
     private fun setFabIcon() {
         val activity = (activity as MainActivity)
