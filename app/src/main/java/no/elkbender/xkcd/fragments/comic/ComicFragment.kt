@@ -22,6 +22,7 @@ import no.elkbender.xkcd.activities.MainActivity.Companion.MOST_RECENT
 import no.elkbender.xkcd.activities.MainActivity.Companion.SHARED_PREFERENCES
 import no.elkbender.xkcd.db.ComicsDb
 import no.elkbender.xkcd.extensions.showSnack
+import no.elkbender.xkcd.utility.GestureListener
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.OkHttpClient
@@ -29,14 +30,30 @@ import okhttp3.Response
 import java.io.IOException
 import java.net.URL
 
-class ComicFragment : Fragment() {
+class ComicFragment : Fragment(), View.OnTouchListener {
     private val client = OkHttpClient()
     private lateinit var comic: Comic
     private lateinit var image: Bitmap
+    private lateinit var gestureDetector: GestureDetector
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        gestureDetector = GestureDetector(requireContext(), object : GestureListener() {
+            override fun onSwipe(direction: Direction): Boolean {
+                when(direction) {
+                    Direction.Left -> next.callOnClick()
+                    Direction.Right -> prev.callOnClick()
+                    else -> print("Ignore these")
+                }
+                return true
+            }
+
+            override fun onLongPress(e: MotionEvent?) {
+                super.onLongPress(e)
+                requireActivity().runOnUiThread { showAltText() }
+            }
+        })
         initComic()
     }
 
@@ -66,11 +83,14 @@ class ComicFragment : Fragment() {
         showComic()
     }
 
+    override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+        gestureDetector.onTouchEvent(event)
+        v?.performClick()
+        return true
+    }
+
     private fun initListeners() {
-        requireActivity().runOnUiThread {
-            addFabListener()
-            comic_img.setOnLongClickListener { showAltText();true }
-        }
+        requireActivity().runOnUiThread { addFabListener() }
 
         first.setOnClickListener { getComic(MainActivity.FIRST_COMIC) }
         prev.setOnClickListener { getComic(MainActivity.previous(comic)) }
@@ -85,6 +105,8 @@ class ComicFragment : Fragment() {
         }
         next.setOnClickListener { getComic(MainActivity.next(comic)) }
         last.setOnClickListener { getComic(MainActivity.CURRENT_COMIC) }
+
+        comic_img.setOnTouchListener(this)
     }
 
     fun shareComic() {

@@ -8,7 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import no.elkbender.xkcd.db.Comic
 import no.elkbender.xkcd.R
 
-class FavouritesAdapter(private val favourites: List<Comic>, private val clickListener: (Comic) -> Unit) : RecyclerView.Adapter<FavouritesAdapter.FavViewHolder>() {
+class FavouritesAdapter(private val favourites: List<Comic>, private val clickListener: (Comic) -> Unit) :
+    RecyclerView.Adapter<FavouritesAdapter.FavViewHolder>() {
     inner class FavViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val num = itemView.findViewById<TextView>(R.id.number)
         private val title = itemView.findViewById<TextView>(R.id.title)
