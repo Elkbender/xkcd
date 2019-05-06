@@ -5,9 +5,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -21,6 +19,7 @@ import no.elkbender.xkcd.activities.MainActivity
 import no.elkbender.xkcd.activities.MainActivity.Companion.fetchComic
 import no.elkbender.xkcd.R
 import no.elkbender.xkcd.activities.MainActivity.Companion.MOST_RECENT
+import no.elkbender.xkcd.activities.MainActivity.Companion.SHARED_PREFERENCES
 import no.elkbender.xkcd.db.ComicsDb
 import no.elkbender.xkcd.extensions.showSnack
 import okhttp3.Call
@@ -78,7 +77,7 @@ class ComicFragment : Fragment() {
         random.setOnClickListener {
             getComic(
                 MainActivity.random(
-                    requireActivity().getSharedPreferences("sharedPreferences", Context.MODE_PRIVATE).getInt(
+                    requireActivity().getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE).getInt(
                         MOST_RECENT, 1
                     )
                 )
@@ -152,8 +151,11 @@ class ComicFragment : Fragment() {
         requireActivity().runOnUiThread {
             requireActivity().title = comic.safe_title
             comic_img.setImageBitmap(image)
+            padding.visibility = if(isScrollable()) View.VISIBLE else View.GONE
         }
     }
+
+    private fun isScrollable() = comic_view.height < comic_img.height + comic_view.paddingTop + comic_view.paddingBottom
 
     private fun setFabIcon() {
         val activity = (activity as MainActivity)

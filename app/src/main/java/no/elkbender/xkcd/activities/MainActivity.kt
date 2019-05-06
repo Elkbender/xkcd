@@ -28,7 +28,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var menu: Menu
     private lateinit var comicFragment: ComicFragment
 
-    private val sharedPreferences = "sharedPreferences"
     private val favouritesFragment = FavouritesFragment()
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -99,6 +98,13 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    private fun updateMostRecentComic() {
+        val prefs = getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE)
+
+        if (prefs.getInt(MOST_RECENT, 1) < intent.getParcelableExtra<Comic>(COMIC_ARG).num)
+            prefs.edit().putInt(MOST_RECENT, intent.getParcelableExtra<Comic>(COMIC_ARG).num).apply()
+    }
+
     fun replaceComicFragment(fragment: ComicFragment) {
         comicFragment = fragment
         runOnUiThread {
@@ -106,21 +112,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateMostRecentComic() {
-        val prefs = getSharedPreferences(sharedPreferences, Context.MODE_PRIVATE)
-
-        val storedRecent = prefs.getInt(MOST_RECENT, 1)
-        val foundRecent = intent.getParcelableExtra<Comic>(COMIC_ARG).num
-
-        if (storedRecent < foundRecent)
-            prefs.edit().putInt(MOST_RECENT, intent.getParcelableExtra<Comic>(COMIC_ARG).num).apply()
-    }
-
     companion object {
         private const val COMIC_ARG = "COMIC_ARG"
         private const val IMAGE_ARG = "IMAGE_ARG"
 
         const val MOST_RECENT = "MOST_RECENT"
+        const val SHARED_PREFERENCES = "SHARED_PREFERENCES"
         const val CURRENT_COMIC = "https://xkcd.com/info.0.json"
         const val FIRST_COMIC = "https://xkcd.com/1/info.0.json"
 
