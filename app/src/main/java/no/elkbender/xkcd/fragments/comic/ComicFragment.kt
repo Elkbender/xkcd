@@ -1,5 +1,6 @@
 package no.elkbender.xkcd.fragments.comic
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -19,6 +20,7 @@ import no.elkbender.xkcd.db.Comic
 import no.elkbender.xkcd.activities.MainActivity
 import no.elkbender.xkcd.activities.MainActivity.Companion.fetchComic
 import no.elkbender.xkcd.R
+import no.elkbender.xkcd.activities.MainActivity.Companion.MOST_RECENT
 import no.elkbender.xkcd.db.ComicsDb
 import no.elkbender.xkcd.extensions.showSnack
 import okhttp3.Call
@@ -73,7 +75,15 @@ class ComicFragment : Fragment() {
 
         first.setOnClickListener { getComic(MainActivity.FIRST_COMIC) }
         prev.setOnClickListener { getComic(MainActivity.previous(comic)) }
-        random.setOnClickListener { getComic(MainActivity.random()) }
+        random.setOnClickListener {
+            getComic(
+                MainActivity.random(
+                    requireActivity().getSharedPreferences("sharedPreferences", Context.MODE_PRIVATE).getInt(
+                        MOST_RECENT, 1
+                    )
+                )
+            )
+        }
         next.setOnClickListener { getComic(MainActivity.next(comic)) }
         last.setOnClickListener { getComic(MainActivity.CURRENT_COMIC) }
     }

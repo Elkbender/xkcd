@@ -28,7 +28,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var menu: Menu
     private lateinit var comicFragment: ComicFragment
 
-    private val favsFragment = FavouritesFragment()
+    private val sharedPreferences = "sharedPreferences"
+    private val favouritesFragment = FavouritesFragment()
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -47,7 +48,7 @@ class MainActivity : AppCompatActivity() {
                 fab.hide()
                 menu.findItem(R.id.share).isVisible = false
                 replaceFragment(
-                    favsFragment,
+                    favouritesFragment,
                     R.anim.enter_right,
                     R.anim.exit_left,
                     R.id.fragment_container,
@@ -64,11 +65,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         db = ComicsDb.getInstance(this)
+        updateMostRecentComic()
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu) : Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         this.menu = menu
         menuInflater.inflate(R.menu.menu_options, menu)
 
@@ -83,8 +85,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-        when (id) {
+        when (item.itemId) {
             R.id.search -> {
                 showSnack("Not implemented", Snackbar.LENGTH_LONG)
                 return true
@@ -105,16 +106,27 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun updateMostRecentComic() {
+        val prefs = getSharedPreferences(sharedPreferences, Context.MODE_PRIVATE)
+
+        val storedRecent = prefs.getInt(MOST_RECENT, 1)
+        val foundRecent = intent.getParcelableExtra<Comic>(COMIC_ARG).num
+
+        if (storedRecent < foundRecent)
+            prefs.edit().putInt(MOST_RECENT, intent.getParcelableExtra<Comic>(COMIC_ARG).num).apply()
+    }
+
     companion object {
         private const val COMIC_ARG = "COMIC_ARG"
         private const val IMAGE_ARG = "IMAGE_ARG"
 
+        const val MOST_RECENT = "MOST_RECENT"
         const val CURRENT_COMIC = "https://xkcd.com/info.0.json"
         const val FIRST_COMIC = "https://xkcd.com/1/info.0.json"
 
         fun previous(c: Comic) = "https://xkcd.com/${c.num.minus(1)}/info.0.json"
         fun next(c: Comic) = "https://xkcd.com/${c.num.plus(1)}/info.0.json"
-        fun random() = "https://xkcd.com/221/info.0.json" // TODO: Make actual random rather than joke
+        fun random(i: Int) = "https://xkcd.com/${(0..i).random()}/info.0.json"
 
         fun buildUrl(num: String) = "https://xkcd.com/$num/info.0.json"
 
