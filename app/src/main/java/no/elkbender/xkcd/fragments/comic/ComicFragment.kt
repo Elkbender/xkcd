@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
@@ -14,12 +15,12 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_comic.*
 import kotlinx.android.synthetic.main.nav_button_bar.*
-import no.elkbender.xkcd.db.Comic
-import no.elkbender.xkcd.activities.MainActivity
-import no.elkbender.xkcd.activities.MainActivity.Companion.fetchComic
 import no.elkbender.xkcd.R
+import no.elkbender.xkcd.activities.MainActivity
 import no.elkbender.xkcd.activities.MainActivity.Companion.MOST_RECENT
 import no.elkbender.xkcd.activities.MainActivity.Companion.SHARED_PREFERENCES
+import no.elkbender.xkcd.activities.MainActivity.Companion.fetchComic
+import no.elkbender.xkcd.db.Comic
 import no.elkbender.xkcd.db.ComicsDb
 import no.elkbender.xkcd.extensions.showSnack
 import no.elkbender.xkcd.utility.GestureListener
@@ -29,7 +30,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Response
 import java.io.IOException
 import java.net.URL
-import android.util.TypedValue
+import android.view.animation.TranslateAnimation
 
 
 class ComicFragment : Fragment(), View.OnTouchListener {
@@ -44,17 +45,33 @@ class ComicFragment : Fragment(), View.OnTouchListener {
         gestureDetector = GestureDetector(requireContext(), object : GestureListener() {
             override fun onSwipe(direction: Direction): Boolean {
                 when (direction) {
-                    Direction.Left -> next.callOnClick()
-                    Direction.Right -> prev.callOnClick()
+                    Direction.Left -> {
+                        next.callOnClick()
+                        animate(-150f)
+                    }
+                    Direction.Right -> {
+                        prev.callOnClick()
+                        animate(150f)
+                    }
                     else -> print("Ignore these")
                 }
                 return true
+            }
+
+            private fun animate(xDelta: Float) {
+                comic_img.startAnimation(
+                    TranslateAnimation(0f, xDelta, 0f, 0f).apply {
+                        fillAfter = false
+                        duration = 250
+                    }
+                )
             }
 
             override fun onLongPress(e: MotionEvent?) {
                 super.onLongPress(e)
                 requireActivity().runOnUiThread { showAltText() }
             }
+
         })
         initComic()
     }
